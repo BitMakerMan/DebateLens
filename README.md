@@ -68,13 +68,13 @@ Il progetto sarà interamente ospitato su **Railway** e sarà composto dai segue
 
 ## 5. Definizione dei Ruoli e dei Task (Attività di Gruppo)
 
-* **Team Frontend (1-2 persone):**
+* **Team Frontend:**
     * **Task:** Progettare e sviluppare la landing page (HTML/CSS/JS), la chiamata al webhook e la pagina di visualizzazione dei risultati.
-* **Team Backend / N8N Specialist (2 persone):**
+* **Team Backend / N8N Specialist:**
     * **Task:** Progettare e implementare il workflow principale in N8N, configurare il webhook, i nodi HTTP e la gestione degli errori.
-* **Team AI & Prompt Engineering (1 persona):**
+* **Team AI & Prompt Engineering:**
     * **Task:** Raffinare e testare iterativamente il prompt politico per massimizzare l'accuratezza e l'affidabilità dell'analisi dell'LLM.
-* **Team Dati & Python (1 persona):**
+* **Team Dati & Python:**
     * **Task:** Progettare lo schema del database PostgreSQL e scrivere lo script Python (`matplotlib`) per generare il grafico radar.
 
 ## 6. Schema del Database (Esempio PostgreSQL)
