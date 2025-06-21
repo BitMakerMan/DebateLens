@@ -73,7 +73,7 @@ Oppure, se hai un file `requirements.txt` (consigliato):
 pip install -r requirements.txt
 ```
 
-### 4. Configura la Chiave API di Google Gemini (Opzionale ma Consigliato)
+### 4. Configura la Chiave API di Google Gemini
 
 Per usare le funzionalità complete di analisi AI basate su Google Gemini, devi ottenere una chiave API e configurarla.
 
