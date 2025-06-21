@@ -11,7 +11,7 @@
 
 **DebateLens** è un'applicazione web basata su Flask progettata per eseguire **analisi comparative della comunicazione**. Sviluppata come "Craicek's Version" per la Rizzo AI Academy, usa l'intelligenza artificiale (tramite Google Gemini AI) o un'analisi euristica di fallback per valutare i testi di diversi partecipanti su criteri specifici.
 
-Lo scopo principale del progetto è fornire un'analisi obiettiva e dettagliata di come i diversi oratori comunicano, evidenziando **punti di forza e debolezza** su metriche come rigorosità tecnica, uso di dati oggettivi, approccio divulgativo, stile comunicativo, focalizzazione sull'argomento e orientamento pratico. I risultati vengono presentati tramite un **report comparativo** e un'accattivante **visualizzazione grafica a radar** in stile "Iron Man".
+Lo scopo principale del progetto è fornire un'analisi obiettiva e dettagliata di come i diversi oratori comunicano, evidenziando **punti di forza e debolezza** su metriche come rigorosità tecnica, uso di dati oggettivi, approccio divulgativo, stile comunicativo, focalizzazione sull'argomento e orientamento pratico. I risultati vengono presentati tramite un **report comparativo** e un'accattivante **visualizzazione grafica a radar**.
 
 ## ✨ Funzionalità Principali
 
