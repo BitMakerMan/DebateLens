@@ -24,7 +24,7 @@ Lo scopo principale del progetto è fornire un'analisi obiettiva e dettagliata d
   - Stile Comunicativo
   - Focalizzazione Argomento
   - Orientamento Pratico
-- **Visualizzazione Comparativa:** Genera un grafico a radar (stile "Iron Man") per visualizzare le performance comparative di più partecipanti.
+- **Visualizzazione Comparativa:** Genera un grafico a radar per visualizzare le performance comparative di più partecipanti.
 - **Report Comparativo:** Produce un report testuale con riepiloghi, confronti dettagliati e insight automatici tra i partecipanti.
 - **API RESTful:** Espone un endpoint `/api/analyze` per ricevere i dati dei partecipanti e restituire i risultati dell'analisi in formato JSON.
 - **Interfaccia Web Semplice:** Il progetto include un front-end minimale per l'interazione (servito da `index.html` e altri file statici).
