@@ -325,8 +325,8 @@ DebateLens/
 ## 📄 Licenza e Credits
 
 ### Sviluppo
-- **Craicek** - Sviluppatore principale
-- **Rizzo AI Academy** - Sponsor e testing
+- **Craicek** - Sviluppatore
+- **Rizzo AI Academy** - Esercizi pratici utilizzo AI
 
 ### Tecnologie
 - **Google Gemini AI** - Motore di analisi
