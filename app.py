@@ -1,6 +1,6 @@
 # DebateLens - Analisi Comparativa della Comunicazione
 # Craicek's Version - Rizzo AI Academy
-# Versione Finale Produzione
+# Versione Fixed - Gestione Robusta dei Tipi di Dato
 
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
@@ -51,13 +51,35 @@ class AnalysisResult:
         }
 
 
+def safe_int(value, default=5, min_val=1, max_val=10):
+    """Converte sicuramente un valore in int con validazione range"""
+    try:
+        # Gestisci diversi tipi di input
+        if isinstance(value, str):
+            # Rimuovi caratteri non numerici tranne punto e virgola
+            cleaned = ''.join(c for c in value if c.isdigit() or c in '.,')
+            if not cleaned:
+                return default
+            # Prendi solo la prima parte se ci sono decimali
+            value = float(cleaned.replace(',', '.'))
+
+        result = int(float(value))
+        # Assicurati che sia nel range valido
+        return max(min_val, min(max_val, result))
+    except (ValueError, TypeError):
+        print(f"⚠️ Valore non valido ricevuto: {value}, usando default: {default}")
+        return default
+
+
 class DebateLensAnalyzer:
     """Core analyzer per DebateLens con Google Gemini AI"""
 
     def __init__(self, api_key: str, model_name: str = "gemini-1.5-flash"):
+        if not api_key or api_key == 'your-google-api-key-here':
+            raise ValueError("GOOGLE_API_KEY non configurata! Configura la tua API key nel file .env")
+
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel(model_name)
-        self.last_error = None
         self.analysis_criteria = [
             'rigorosita_tecnica', 'uso_dati_oggettivi', 'approccio_divulgativo',
             'stile_comunicativo', 'focalizzazione_argomento', 'orientamento_pratico'
@@ -66,185 +88,209 @@ class DebateLensAnalyzer:
     def create_analysis_prompt(self, text: str, participant_name: str) -> str:
         """Crea il prompt per l'analisi AI"""
         return f"""
-Analizza il seguente testo di {participant_name} secondo questi 6 criteri, assegnando un punteggio da 1 a 10:
+Analizza il seguente testo di {participant_name} secondo questi 6 criteri, assegnando un punteggio NUMERICO INTERO da 1 a 10:
 
 TESTO: {text}
 
-CRITERI:
-1. Rigorosità tecnica (1-10): Precisione terminologica e concetti specialistici
-2. Uso di dati oggettivi (1-10): Statistiche, ricerche, fonti verificabili
-3. Approccio divulgativo (1-10): Accessibilità, esempi, analogie
-4. Stile comunicativo (1-10): Fluidità e capacità di coinvolgimento
-5. Focalizzazione argomento (1-10): Aderenza al tema, coerenza logica
-6. Orientamento pratico (1-10): Soluzioni concrete, applicabilità
+CRITERI (punteggio da 1 a 10):
+1. Rigorosità tecnica: Precisione terminologica e concetti specialistici
+2. Uso di dati oggettivi: Statistiche, ricerche, fonti verificabili
+3. Approccio divulgativo: Accessibilità, esempi, analogie
+4. Stile comunicativo: Fluidità e capacità di coinvolgimento
+5. Focalizzazione argomento: Aderenza al tema, coerenza logica
+6. Orientamento pratico: Soluzioni concrete, applicabilità
 
-FORMATO JSON:
+IMPORTANTE: Restituisci SOLO numeri interi da 1 a 10 per ogni criterio.
+
+FORMATO JSON RICHIESTO:
 {{
-  "rigorosita_tecnica": X,
-  "uso_dati_oggettivi": X,
-  "approccio_divulgativo": X,
-  "stile_comunicativo": X,
-  "focalizzazione_argomento": X,
-  "orientamento_pratico": X,
+  "rigorosita_tecnica": 7,
+  "uso_dati_oggettivi": 6,
+  "approccio_divulgativo": 8,
+  "stile_comunicativo": 7,
+  "focalizzazione_argomento": 9,
+  "orientamento_pratico": 6,
   "explanations": {{
-    "rigorosita_tecnica": "Breve spiegazione",
-    "uso_dati_oggettivi": "Breve spiegazione",
-    "approccio_divulgativo": "Breve spiegazione",
-    "stile_comunicativo": "Breve spiegazione",
-    "focalizzazione_argomento": "Breve spiegazione",
-    "orientamento_pratico": "Breve spiegazione"
+    "rigorosita_tecnica": "Spiegazione breve e concisa",
+    "uso_dati_oggettivi": "Spiegazione breve e concisa",
+    "approccio_divulgativo": "Spiegazione breve e concisa",
+    "stile_comunicativo": "Spiegazione breve e concisa",
+    "focalizzazione_argomento": "Spiegazione breve e concisa",
+    "orientamento_pratico": "Spiegazione breve e concisa"
   }}
 }}
 """
 
     def analyze_participant(self, text: str, participant_name: str) -> AnalysisResult:
         """Analizza un partecipante con Google Gemini"""
+        if not text.strip():
+            raise ValueError(f"Testo vuoto per {participant_name}")
+
+        prompt = self.create_analysis_prompt(text, participant_name)
+
+        generation_config = genai.types.GenerationConfig(
+            temperature=0.2,  # Ridotto per maggiore consistenza
+            max_output_tokens=1200,
+            response_mime_type="application/json"
+        )
+
         try:
-            prompt = self.create_analysis_prompt(text, participant_name)
-
-            generation_config = genai.types.GenerationConfig(
-                temperature=0.3,
-                max_output_tokens=1000,
-                response_mime_type="application/json"
-            )
-
             response = self.model.generate_content(prompt, generation_config=generation_config)
             result_json = json.loads(response.text)
 
+            # Validazione e conversione sicura dei punteggi
+            safe_scores = {}
+            for criterion in self.analysis_criteria:
+                raw_value = result_json.get(criterion, 5)
+                safe_scores[criterion] = safe_int(raw_value)
+                print(f"🔍 {criterion}: {raw_value} -> {safe_scores[criterion]}")
+
+            # Validazione explanations
+            explanations = result_json.get('explanations', {})
+            if not isinstance(explanations, dict):
+                explanations = {}
+
+            # Assicurati che ci siano explanations per tutti i criteri
+            for criterion in self.analysis_criteria:
+                if criterion not in explanations or not explanations[criterion]:
+                    explanations[criterion] = f"Analisi automatica per {criterion.replace('_', ' ')}"
+
             return AnalysisResult(
                 participant_name=participant_name,
-                rigorosita_tecnica=result_json['rigorosita_tecnica'],
-                uso_dati_oggettivi=result_json['uso_dati_oggettivi'],
-                approccio_divulgativo=result_json['approccio_divulgativo'],
-                stile_comunicativo=result_json['stile_comunicativo'],
-                focalizzazione_argomento=result_json['focalizzazione_argomento'],
-                orientamento_pratico=result_json['orientamento_pratico'],
-                explanations=result_json['explanations']
+                rigorosita_tecnica=safe_scores['rigorosita_tecnica'],
+                uso_dati_oggettivi=safe_scores['uso_dati_oggettivi'],
+                approccio_divulgativo=safe_scores['approccio_divulgativo'],
+                stile_comunicativo=safe_scores['stile_comunicativo'],
+                focalizzazione_argomento=safe_scores['focalizzazione_argomento'],
+                orientamento_pratico=safe_scores['orientamento_pratico'],
+                explanations=explanations
             )
 
+        except json.JSONDecodeError as e:
+            print(f"❌ Errore JSON dal modello AI: {e}")
+            print(f"🔍 Risposta grezza: {response.text[:500]}")
+            raise ValueError(f"Risposta AI non valida per {participant_name}")
         except Exception as e:
-            self.last_error = str(e)
-            return None
+            print(f"❌ Errore generico nell'analisi AI: {e}")
+            raise
 
     def create_radar_chart(self, analyses: list) -> str:
-        """Genera radar chart PNG Iron Man style"""
+        """Genera radar chart PNG con gestione emoji migliorata"""
         if not analyses:
-            return None
+            raise ValueError("Nessuna analisi da visualizzare")
 
-        try:
-            # Setup matplotlib per server
-            import matplotlib
-            matplotlib.use('Agg')
-            plt.ioff()
-            plt.clf()
-            plt.close('all')
+        # Setup matplotlib per server
+        import matplotlib
+        matplotlib.use('Agg')
+        plt.ioff()
+        plt.clf()
+        plt.close('all')
 
-            # Crea il plot
-            fig, ax = plt.subplots(figsize=(12, 10), subplot_kw=dict(projection='polar'), dpi=150)
-            fig.patch.set_facecolor('#1a1a1a')
+        # Crea il plot
+        fig, ax = plt.subplots(figsize=(12, 10), subplot_kw=dict(projection='polar'), dpi=150)
+        fig.patch.set_facecolor('#1a1a1a')
 
-            # Labels e angoli
-            labels = ['Rigorosità\nTecnica', 'Uso Dati\nOggettivi', 'Approccio\nDivulgativo',
-                      'Stile\nComunicativo', 'Focalizzazione\nArgomento', 'Orientamento\nPratico']
-            angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
-            angles += angles[:1]
+        # Labels senza emoji problematiche
+        labels = ['Rigorosita\nTecnica', 'Uso Dati\nOggettivi', 'Approccio\nDivulgativo',
+                  'Stile\nComunicativo', 'Focalizzazione\nArgomento', 'Orientamento\nPratico']
+        angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
+        angles += angles[:1]
 
-            # Colori Iron Man
-            colors = ['#dc2626', '#fbbf24', '#b91c1c', '#f59e0b']
+        # Palette estesa tech-inspired
+        colors = [
+            '#dc2626',  # Rosso primario
+            '#fbbf24',  # Oro tech
+            '#b91c1c',  # Rosso scuro
+            '#f59e0b',  # Arancione
+            '#7c2d12',  # Marrone metallico
+            '#ea580c',  # Arancione intenso
+            '#1f2937',  # Grigio antracite
+            '#6366f1',  # Blu elettrico
+            '#10b981',  # Verde tech
+            '#8b5cf6',  # Viola digitale
+            '#ec4899',  # Rosa neon
+            '#06b6d4',  # Ciano
+            '#84cc16',  # Verde lime
+            '#f97316',  # Arancione vivace
+            '#6b7280',  # Grigio argento
+            '#ef4444',  # Rosso brillante
+            '#facc15',  # Giallo elettrico
+            '#3b82f6',  # Blu elettrico
+            '#22c55e',  # Verde brillante
+            '#a855f7'  # Viola brillante
+        ]
 
-            # Plot ogni partecipante
-            for i, analysis in enumerate(analyses):
-                values = [
-                    analysis.rigorosita_tecnica, analysis.uso_dati_oggettivi,
-                    analysis.approccio_divulgativo, analysis.stile_comunicativo,
-                    analysis.focalizzazione_argomento, analysis.orientamento_pratico
-                ]
-                values += values[:1]
+        # Plot ogni partecipante con colori distintivi
+        for i, analysis in enumerate(analyses):
+            values = [
+                analysis.rigorosita_tecnica, analysis.uso_dati_oggettivi,
+                analysis.approccio_divulgativo, analysis.stile_comunicativo,
+                analysis.focalizzazione_argomento, analysis.orientamento_pratico
+            ]
+            values += values[:1]
 
-                color = colors[i % len(colors)]
-                ax.plot(angles, values, 'o-', linewidth=4, label=analysis.participant_name,
-                        color=color, markersize=10, markerfacecolor=color,
-                        markeredgecolor='white', markeredgewidth=2)
-                ax.fill(angles, values, alpha=0.25, color=color)
+            color = colors[i % len(colors)]
 
-            # Styling Iron Man
-            ax.set_facecolor('#0a0a0a')
-            ax.set_xticks(angles[:-1])
-            ax.set_xticklabels(labels, fontsize=12, color='#fbbf24', fontweight='bold')
-            ax.set_ylim(0, 10)
-            ax.set_yticks(range(0, 11, 2))
-            ax.set_yticklabels(range(0, 11, 2), fontsize=10, color='#dc2626', fontweight='bold')
-            ax.grid(True, color='#444444', alpha=0.7, linewidth=1)
+            # Stile linea variabile per maggiore distinzione
+            line_styles = ['-', '--', '-.', ':']
+            line_style = line_styles[i % len(line_styles)]
 
-            plt.title('🔥 DebateLens - Analisi Comparativa\nCraicek\'s Version',
-                      size=18, fontweight='bold', pad=30, color='#fbbf24')
+            # Marker shapes variabili
+            markers = ['o', 's', '^', 'D', 'v', '<', '>', 'p', '*', 'h']
+            marker = markers[i % len(markers)]
 
+            ax.plot(angles, values, marker=marker, linestyle=line_style, linewidth=4,
+                    label=analysis.participant_name, color=color, markersize=10,
+                    markerfacecolor=color, markeredgecolor='white', markeredgewidth=2,
+                    alpha=0.9)
+            ax.fill(angles, values, alpha=0.15, color=color)
+
+        # Styling Iron Man
+        ax.set_facecolor('#0a0a0a')
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(labels, fontsize=12, color='#fbbf24', fontweight='bold')
+        ax.set_ylim(0, 10)
+        ax.set_yticks(range(0, 11, 2))
+        ax.set_yticklabels(range(0, 11, 2), fontsize=10, color='#dc2626', fontweight='bold')
+        ax.grid(True, color='#444444', alpha=0.7, linewidth=1)
+
+        # Titolo professionale
+        plt.title('DebateLens - Analisi AI Comparativa\nCraicek\'s Version - Rizzo AI Academy',
+                  size=18, fontweight='bold', pad=30, color='#fbbf24')
+
+        # Legend migliorata per molti partecipanti
+        if len(analyses) <= 6:
+            # Posizione standard per pochi partecipanti
             legend = plt.legend(loc='upper right', bbox_to_anchor=(1.25, 1.0),
                                 facecolor='#1a1a1a', edgecolor='#dc2626',
                                 labelcolor='#fbbf24', fontsize=11, framealpha=0.9)
-            legend.get_frame().set_linewidth(2)
+        else:
+            # Posizione ottimizzata per molti partecipanti
+            legend = plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5),
+                                facecolor='#1a1a1a', edgecolor='#dc2626',
+                                labelcolor='#fbbf24', fontsize=10, framealpha=0.9,
+                                ncol=1 if len(analyses) <= 10 else 2)
 
-            plt.tight_layout()
+        legend.get_frame().set_linewidth(2)
 
-            # Converti in base64
-            buffer = BytesIO()
-            plt.savefig(buffer, format='png', dpi=150, bbox_inches='tight',
-                        facecolor='#1a1a1a', edgecolor='none', pad_inches=0.2)
-            buffer.seek(0)
-            chart_base64 = base64.b64encode(buffer.getvalue()).decode()
+        plt.tight_layout()
 
-            plt.close(fig)
-            plt.clf()
+        # Converti in base64
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png', dpi=150, bbox_inches='tight',
+                    facecolor='#1a1a1a', edgecolor='none', pad_inches=0.2)
+        buffer.seek(0)
+        chart_base64 = base64.b64encode(buffer.getvalue()).decode()
 
-            return chart_base64
+        plt.close(fig)
+        plt.clf()
 
-        except Exception as e:
-            return self.create_html_fallback(analyses)
-
-    def create_html_fallback(self, analyses):
-        """Fallback HTML quando matplotlib fallisce"""
-        try:
-            colors = ['#dc2626', '#fbbf24', '#b91c1c', '#f59e0b']
-
-            html = '<div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 40px; border-radius: 16px; text-align: center; border: 2px solid #dc2626;">'
-            html += '<h3 style="color: #fbbf24; margin-bottom: 30px;">📊 Radar Chart - Iron Man Style</h3>'
-
-            # Radar visuale
-            html += '<div style="position: relative; width: 400px; height: 400px; margin: 0 auto; border: 3px solid #dc2626; border-radius: 50%; background: radial-gradient(circle, rgba(220, 38, 38, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%);">'
-
-            # Cerchi concentrici
-            for i, radius in enumerate([20, 35, 50, 65, 80]):
-                opacity = 0.6 - (i * 0.1)
-                html += f'<div style="position: absolute; top: {50 - radius / 2}%; left: {50 - radius / 2}%; width: {radius}%; height: {radius}%; border: 1px solid #666; border-radius: 50%; opacity: {opacity};"></div>'
-
-            # Assi
-            html += '<div style="position: absolute; top: 0; left: 50%; width: 2px; height: 100%; background: linear-gradient(to bottom, #dc2626, #fbbf24, #dc2626); opacity: 0.8;"></div>'
-            html += '<div style="position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: linear-gradient(to right, #dc2626, #fbbf24, #dc2626); opacity: 0.8;"></div>'
-
-            # Punti dati
-            for i, analysis in enumerate(analyses[:4]):
-                color = colors[i % len(colors)]
-                html += f'<div style="position: absolute; top: {20 + i * 5}%; left: {60 + i * 5}%; width: 12px; height: 12px; background: {color}; border-radius: 50%; border: 2px solid white; z-index: 10;" title="{analysis.participant_name}"></div>'
-
-            html += '<div style="position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; background: #fbbf24; border-radius: 50%; transform: translate(-50%, -50%); border: 2px solid white;"></div>'
-            html += '</div>'
-
-            # Legenda
-            html += '<div style="margin-top: 25px; display: flex; justify-content: center; gap: 20px;">'
-            for i, analysis in enumerate(analyses[:4]):
-                color = colors[i % len(colors)]
-                html += f'<div style="display: flex; align-items: center; gap: 8px;"><div style="width: 16px; height: 16px; background: {color}; border-radius: 50%; border: 2px solid white;"></div><span style="color: #fbbf24; font-weight: bold;">{analysis.participant_name}</span></div>'
-            html += '</div></div>'
-
-            return html
-
-        except Exception as e:
-            return None
+        return chart_base64
 
     def generate_comparative_report(self, analyses: list) -> dict:
-        """Genera report comparativo con insights"""
+        """Genera report comparativo con gestione robusta dei tipi"""
         if len(analyses) < 2:
-            return {"error": "Servono almeno 2 partecipanti per il confronto"}
+            raise ValueError("Servono almeno 2 partecipanti per il confronto")
 
         report = {
             "summary": {},
@@ -253,129 +299,147 @@ FORMATO JSON:
         }
 
         try:
-            # Calcola statistiche per criterio
+            # Calcola statistiche per criterio con gestione robusta
             for criterion in self.analysis_criteria:
-                scores = [getattr(analysis, criterion) for analysis in analyses]
-                report["summary"][criterion] = {
-                    "average": round(sum(scores) / len(scores), 2),
-                    "max_participant": analyses[scores.index(max(scores))].participant_name,
-                    "max_score": max(scores),
-                    "min_participant": analyses[scores.index(min(scores))].participant_name,
-                    "min_score": min(scores)
-                }
+                scores = []
+                for analysis in analyses:
+                    score = getattr(analysis, criterion)
+                    # Converti sicuramente a int
+                    safe_score = safe_int(score)
+                    scores.append(safe_score)
+
+                if scores:  # Solo se abbiamo punteggi validi
+                    max_score = max(scores)
+                    min_score = min(scores)
+                    max_index = scores.index(max_score)
+                    min_index = scores.index(min_score)
+
+                    report["summary"][criterion] = {
+                        "average": round(sum(scores) / len(scores), 2),
+                        "max_participant": analyses[max_index].participant_name,
+                        "max_score": max_score,
+                        "min_participant": analyses[min_index].participant_name,
+                        "min_score": min_score
+                    }
 
             # Dettagli partecipanti
             for analysis in analyses:
                 report["detailed_comparison"][analysis.participant_name] = analysis.to_dict()
 
-            # Insights automatici
+            # Insights automatici intelligenti
             if len(analyses) >= 2:
+                # Trova il leader in ogni categoria
+                for criterion in self.analysis_criteria:
+                    scores = [safe_int(getattr(analysis, criterion)) for analysis in analyses]
+                    max_score = max(scores)
+                    max_participant = analyses[scores.index(max_score)].participant_name
+
+                    if max_score >= 8:  # Solo per punteggi elevati
+                        criterion_name = criterion.replace('_', ' ').title()
+                        report["insights"].append(
+                            f"🔥 {max_participant} eccelle in {criterion_name} ({max_score}/10)"
+                        )
+
+                # Confronti diretti tra primi due partecipanti
                 p1, p2 = analyses[0], analyses[1]
 
-                # Converti a int per sicurezza
-                p1_tech = int(p1.rigorosita_tecnica)
-                p2_tech = int(p2.rigorosita_tecnica)
-                p1_div = int(p1.approccio_divulgativo)
-                p2_div = int(p2.approccio_divulgativo)
+                # Analizza punti di forza relativi
+                p1_strengths = []
+                p2_strengths = []
 
-                if p1_tech > p2_tech:
-                    diff = p1_tech - p2_tech
-                    report["insights"].append(f"🔥 {p1.participant_name} eccelle in rigorosità tecnica (+{diff} punti)")
-                elif p2_tech > p1_tech:
-                    diff = p2_tech - p1_tech
-                    report["insights"].append(f"🔥 {p2.participant_name} eccelle in rigorosità tecnica (+{diff} punti)")
+                criteria_names = {
+                    'rigorosita_tecnica': 'rigorosità tecnica',
+                    'uso_dati_oggettivi': 'uso di dati oggettivi',
+                    'approccio_divulgativo': 'approccio divulgativo',
+                    'stile_comunicativo': 'stile comunicativo',
+                    'focalizzazione_argomento': 'focalizzazione sull\'argomento',
+                    'orientamento_pratico': 'orientamento pratico'
+                }
 
-                if p1_div > p2_div:
-                    diff = p1_div - p2_div
-                    report["insights"].append(f"⚡ {p1.participant_name} è più divulgativo (+{diff} punti)")
-                elif p2_div > p1_div:
-                    diff = p2_div - p1_div
-                    report["insights"].append(f"⚡ {p2.participant_name} è più divulgativo (+{diff} punti)")
+                for criterion in self.analysis_criteria:
+                    p1_score = safe_int(getattr(p1, criterion))
+                    p2_score = safe_int(getattr(p2, criterion))
+                    diff = abs(p1_score - p2_score)
 
-                # Insights aggiuntivi
-                if abs(p1_tech - p2_tech) <= 1:
-                    report["insights"].append("🎯 Livello tecnico equilibrato tra i partecipanti")
-                if abs(p1_div - p2_div) <= 1:
-                    report["insights"].append("⚖️ Approccio divulgativo molto simile")
+                    if diff >= 2:  # Differenza significativa
+                        if p1_score > p2_score:
+                            p1_strengths.append(criteria_names[criterion])
+                        else:
+                            p2_strengths.append(criteria_names[criterion])
+
+                if p1_strengths:
+                    report["insights"].append(
+                        f"⚡ {p1.participant_name} si distingue per: {', '.join(p1_strengths)}"
+                    )
+
+                if p2_strengths:
+                    report["insights"].append(
+                        f"⚡ {p2.participant_name} si distingue per: {', '.join(p2_strengths)}"
+                    )
+
+                # Insight di equilibrio
+                balanced_areas = []
+                for criterion in self.analysis_criteria:
+                    scores = [safe_int(getattr(analysis, criterion)) for analysis in analyses[:2]]
+                    if abs(scores[0] - scores[1]) <= 1:
+                        balanced_areas.append(criteria_names[criterion])
+
+                if balanced_areas:
+                    report["insights"].append(
+                        f"⚖️ Equilibrio notevole in: {', '.join(balanced_areas)}"
+                    )
+
+            # Aggiungi info sulla qualità dell'analisi
+            avg_scores = []
+            for analysis in analyses:
+                participant_scores = [
+                    safe_int(analysis.rigorosita_tecnica),
+                    safe_int(analysis.uso_dati_oggettivi),
+                    safe_int(analysis.approccio_divulgativo),
+                    safe_int(analysis.stile_comunicativo),
+                    safe_int(analysis.focalizzazione_argomento),
+                    safe_int(analysis.orientamento_pratico)
+                ]
+                participant_avg = sum(participant_scores) / len(participant_scores)
+                avg_scores.append(participant_avg)
+
+            if avg_scores:
+                overall_avg = sum(avg_scores) / len(avg_scores)
+
+                if overall_avg >= 7.5:
+                    report["insights"].append("🎯 Analisi di alta qualità: comunicazione eccellente rilevata")
+                elif overall_avg >= 6.0:
+                    report["insights"].append("📊 Buona qualità comunicativa con margini di miglioramento")
+                else:
+                    report["insights"].append("💡 Potenziale di crescita significativo identificato")
 
         except Exception as e:
+            print(f"⚠️ Errore nella generazione report: {e}")
+            # Fallback sicuro
             report["insights"] = [
-                "🔥 Analisi comparativa completata",
-                f"📊 {len(analyses)} partecipanti analizzati con successo"
+                "🔥 Analisi completata con successo",
+                f"📊 {len(analyses)} partecipanti analizzati"
             ]
 
         return report
 
 
-def analyze_text_heuristic(text):
-    """Analisi euristica per fallback senza AI"""
-    if not text:
-        return {criterion: 5 for criterion in ['rigorosita_tecnica', 'uso_dati_oggettivi',
-                                               'approccio_divulgativo', 'stile_comunicativo',
-                                               'focalizzazione_argomento', 'orientamento_pratico']}
+# Configurazione API
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 
-    text_lower = text.lower()
-    word_count = len(text.split())
-
-    # Parole chiave per analisi
-    technical_words = ['analisi', 'sistema', 'processo', 'metodologia', 'implementazione']
-    data_words = ['percentuale', 'statistica', 'dati', 'ricerca', 'studio', '%']
-    divulgative_words = ['semplice', 'facile', 'esempio', 'immaginate', 'praticamente']
-    practical_words = ['utilizzare', 'applicare', 'soluzione', 'problema', 'pratico']
-
-    # Calcola scores
-    tech_score = min(10, 4 + sum(1 for word in technical_words if word in text_lower))
-    data_score = min(10, 3 + sum(1 for word in data_words if word in text_lower) * 2)
-    divulgative_score = min(10, 4 + sum(1 for word in divulgative_words if word in text_lower))
-    style_score = min(10, 5 + min(3, word_count // 50))
-    focus_score = max(3, min(10, 8 - text.count('?') - text.count('...')))
-    practical_score = min(10, 4 + sum(1 for word in practical_words if word in text_lower))
-
-    return {
-        'rigorosita_tecnica': tech_score,
-        'uso_dati_oggettivi': data_score,
-        'approccio_divulgativo': divulgative_score,
-        'stile_comunicativo': style_score,
-        'focalizzazione_argomento': focus_score,
-        'orientamento_pratico': practical_score
-    }
-
-
-def create_heuristic_analysis(name, text):
-    """Crea AnalysisResult usando analisi euristica"""
-    scores = analyze_text_heuristic(text)
-
-    explanations = {
-        'rigorosita_tecnica': f'{name} {"usa terminologia tecnica appropriata" if scores["rigorosita_tecnica"] >= 7 else "utilizza un linguaggio più generale"}',
-        'uso_dati_oggettivi': f'{"Presenta riferimenti a dati" if scores["uso_dati_oggettivi"] >= 6 else "Basato più su opinioni"}',
-        'approccio_divulgativo': f'{"Stile molto accessibile" if scores["approccio_divulgativo"] >= 7 else "Approccio più tecnico"}',
-        'stile_comunicativo': f'Comunicazione {["essenziale", "buona", "efficace", "eccellente"][min(3, scores["stile_comunicativo"] // 3)]}',
-        'focalizzazione_argomento': f'Mantiene {"buon" if scores["focalizzazione_argomento"] >= 6 else "discreto"} focus',
-        'orientamento_pratico': f'Orientamento {"molto" if scores["orientamento_pratico"] >= 7 else "moderatamente"} pratico'
-    }
-
-    return AnalysisResult(
-        participant_name=name,
-        rigorosita_tecnica=scores['rigorosita_tecnica'],
-        uso_dati_oggettivi=scores['uso_dati_oggettivi'],
-        approccio_divulgativo=scores['approccio_divulgativo'],
-        stile_comunicativo=scores['stile_comunicativo'],
-        focalizzazione_argomento=scores['focalizzazione_argomento'],
-        orientamento_pratico=scores['orientamento_pratico'],
-        explanations=explanations
-    )
-
-
-# Configurazione
-GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY', 'your-google-api-key-here')
+if not GOOGLE_API_KEY or GOOGLE_API_KEY.strip() == '' or 'Ottieni' in GOOGLE_API_KEY:
+    print("❌ ERRORE: GOOGLE_API_KEY non configurata!")
+    print("🔧 Configura la tua API key nel file .env")
+    print("🌐 Ottieni la key da: https://aistudio.google.com/")
+    sys.exit(1)
 
 # Inizializza analyzer
-if GOOGLE_API_KEY and GOOGLE_API_KEY != 'your-google-api-key-here':
+try:
     analyzer = DebateLensAnalyzer(GOOGLE_API_KEY)
-    AI_MODE = True
-else:
-    analyzer = DebateLensAnalyzer("fake-key")
-    AI_MODE = False
+    print("✅ Google Gemini AI configurato correttamente")
+except Exception as e:
+    print(f"❌ Errore configurazione AI: {e}")
+    sys.exit(1)
 
 # Flask App
 app = Flask(__name__)
@@ -385,11 +449,13 @@ CORS(app)
 # Routes
 @app.route('/')
 def serve_frontend():
+    """Serve la pagina principale"""
     return send_from_directory('.', 'index.html')
 
 
 @app.route('/<path:filename>')
 def serve_static(filename):
+    """Serve file statici"""
     return send_from_directory('.', filename)
 
 
@@ -400,58 +466,81 @@ def analyze_debate():
         data = request.get_json()
 
         if not data or len(data.get('participants', [])) < 2:
-            return jsonify({'error': 'Servono almeno 2 partecipanti'}), 400
+            return jsonify({'error': 'Servono almeno 2 partecipanti per l\'analisi comparativa'}), 400
 
         participants = data['participants']
         analyses = []
 
-        # Analizza ogni partecipante
-        for participant in participants:
-            name = participant.get('name', 'Partecipante')
-            text = participant.get('text', '')
+        print(f"🔍 Avvio analisi per {len(participants)} partecipanti")
 
-            if not text.strip():
-                continue
+        # Analizza ogni partecipante con Google Gemini
+        for i, participant in enumerate(participants, 1):
+            name = participant.get('name', '').strip()
+            text = participant.get('text', '').strip()
 
-            if AI_MODE:
-                try:
-                    analysis = analyzer.analyze_participant(text, name)
-                    if analysis:
-                        analyses.append(analysis)
-                    else:
-                        analyses.append(create_heuristic_analysis(name, text))
-                except:
-                    analyses.append(create_heuristic_analysis(name, text))
-            else:
-                analyses.append(create_heuristic_analysis(name, text))
+            if not name:
+                return jsonify({'error': 'Nome partecipante obbligatorio'}), 400
+
+            if not text:
+                return jsonify({'error': f'Testo obbligatorio per {name}'}), 400
+
+            if len(text) < 50:
+                return jsonify({'error': f'Testo troppo breve per {name} (minimo 50 caratteri)'}), 400
+
+            print(f"🤖 Analizzando partecipante {i}: {name}")
+
+            # Analisi AI
+            analysis = analyzer.analyze_participant(text, name)
+            analyses.append(analysis)
+            print(f"✅ Analisi completata per {name}")
 
         if len(analyses) < 2:
-            return jsonify({'error': 'Analisi fallita'}), 500
+            return jsonify({'error': 'Analisi fallita: non è stato possibile analizzare abbastanza partecipanti'}), 500
 
+        print("📊 Generazione grafico radar...")
         # Genera risultati
         chart_data = analyzer.create_radar_chart(analyses)
+
+        print("📝 Generazione report comparativo...")
         report = analyzer.generate_comparative_report(analyses)
 
+        print("✅ Analisi completata con successo!")
+
         return jsonify({
+            'success': True,
             'timestamp': datetime.now().strftime("%Y%m%d_%H%M%S"),
             'participants_count': len(analyses),
             'chart_data': chart_data,
             'report': report,
             'version': 'DebateLens Craicek\'s Version',
-            'ai_mode': AI_MODE
+            'ai_mode': True,
+            'powered_by': 'Google Gemini AI'
         })
 
+    except ValueError as e:
+        print(f"❌ Errore di validazione: {e}")
+        return jsonify({'error': str(e)}), 400
     except Exception as e:
-        return jsonify({'error': f'Errore: {str(e)}'}), 500
+        print(f"❌ Errore nell'analisi: {e}")
+        print(traceback.format_exc())
+        return jsonify({'error': f'Errore interno del server: {str(e)}'}), 500
 
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """Health check"""
+    """Health check con test AI"""
+    try:
+        # Test rapido dell'AI
+        test_response = analyzer.model.generate_content("Test: rispondi solo 'OK'")
+        ai_status = "OK" if "OK" in test_response.text.strip() else "Partial"
+    except:
+        ai_status = "Error"
+
     return jsonify({
         'status': 'ok',
         'version': 'DebateLens Craicek\'s Version',
-        'ai_mode': AI_MODE,
+        'ai_status': ai_status,
+        'powered_by': 'Google Gemini AI',
         'timestamp': datetime.now().isoformat()
     })
 
@@ -460,15 +549,8 @@ if __name__ == '__main__':
     print("🔥" * 20)
     print("🎯 DebateLens - Craicek's Version")
     print("🚀 Rizzo AI Academy")
+    print("🤖 Powered by Google Gemini AI")
     print("🔥" * 20)
-
-    if AI_MODE:
-        print("✅ Google Gemini AI configurato")
-        print("🤖 Modalità: Analisi AI completa")
-    else:
-        print("🧠 Modalità: Analisi euristica intelligente")
-        print("💡 Configura GOOGLE_API_KEY nel file .env per AI completa")
-
     print("🌐 Server: http://localhost:5000")
     print("=" * 60)
 
