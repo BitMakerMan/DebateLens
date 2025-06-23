@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DebateLens AI - Craicek's Iron Man Style</title>
+    <title>DebateLens AI - Craicek's Gemini </title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,6 @@
             position: relative;
         }
 
-        /* Iron Man Background Pattern */
         body::before {
             content: '';
             position: fixed;
@@ -47,18 +46,6 @@
             margin-bottom: 40px;
             color: white;
             position: relative;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 100px;
-            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik01MCA5QzUwIDkgNjcuNSAxMC41IDc1IDI1QzgyLjUgMzkuNSA4MCA1NSA3MCA2NUw2MCA3NUg0MEwzMCA2NUMyMCA1NSAxNy41IDM5LjUgMjUgMjVDMzIuNSAxMC41IDUwIDkgNTAgOVoiIHN0cm9rZT0iI2ZiYmYyNCIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJyZ2JhKDI1MSwgMTkxLCAzNiwgMC4xKSIvPgo8cGF0aCBkPSJNMzUgMzVIMjBMMjUgNDVIMzVWMzVaIiBzdHJva2U9IiNmYmJmMjQiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0icmdiYSgyNTEsIDE5MSwgMzYsIDAuMykiLz4KPHA+YXRoIGQ9Ik02NSAzNUg4MEw3NSA0NUg2NVYzNVoiIHN0cm9rZT0iI2ZiYmYyNCIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJyZ2JhKDI1MSwgMTkxLCAzNiwgMC4zKSIvPgo8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIyIiBmaWxsPSIjZGMyNjI2Ii8+CjxjaXJjbGUgY3g9IjYwIiBjeT0iNDAiIHI9IjIiIGZpbGw9IiNkYzI2MjYiLz4KPHA+YXRoIGQ9Ik00MCA1NUg2MEw1NSA2NUg0NUw0MCA1NVoiIHN0cm9rZT0iI2ZiYmYyNCIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJyZ2JhKDI1MSwgMTkxLCAzNiwgMC4yKSIvPgo8L3N2Zz4K') center/contain no-repeat;
-            opacity: 0.7;
         }
 
         .header h1 {
@@ -92,22 +79,6 @@
             overflow: hidden;
         }
 
-        .craicek-badge::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.3), transparent);
-            animation: scan 3s infinite;
-        }
-
-        @keyframes scan {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
         .main-card {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -127,16 +98,211 @@
             text-align: center;
             color: #92400e;
             position: relative;
-            overflow: hidden;
         }
 
-        .ai-info::before {
-            content: '🤖';
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 1.5rem;
-            opacity: 0.3;
+        .youtube-section {
+            margin-bottom: 30px;
+        }
+
+        .youtube-card {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(220, 38, 38, 0.1));
+            border: 2px solid #fbbf24;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .youtube-card h3 {
+            color: #dc2626;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .youtube-input-section {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .extract-btn {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 25%, #fbbf24 75%, #f59e0b 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .extract-btn:disabled {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .url-validation {
+            font-weight: 600;
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        .url-validation.valid {
+            color: #38a169;
+        }
+
+        .url-validation.invalid {
+            color: #e53e3e;
+        }
+
+        .extraction-progress {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #fbbf24;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            background: white;
+            padding: 5px;
+            border-radius: 8px;
+            min-width: 80px;
+        }
+
+        .step.active .step-icon {
+            background: #dc2626;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        .step.completed .step-icon {
+            background: #38a169;
+            color: white;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .step-text {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #4a5568;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #dc2626, #fbbf24);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            color: #dc2626;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .extraction-results {
+            background: linear-gradient(135deg, #c6f6d5, #d4f1de);
+            border: 2px solid #38a169;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .video-info {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .participants-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .participant-preview {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 18px;
+            border-radius: 8px;
+            border: 1px solid #38a169;
+            text-align: left;
+        }
+
+        .participant-preview h5 {
+            color: #dc2626;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .use-extracted-btn {
+            background: linear-gradient(135deg, #38a169, #2f855a);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .form-section {
@@ -159,35 +325,6 @@
             border: 2px solid #e2e8f0;
             transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
-        }
-
-        .participant-form::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(to bottom, #dc2626, #fbbf24);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-        }
-
-        .participant-form:hover::before,
-        .participant-form.active::before {
-            transform: scaleY(1);
-        }
-
-        .participant-form:hover {
-            border-color: #dc2626;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.15);
-        }
-
-        .participant-form.active {
-            border-color: #dc2626;
-            background: linear-gradient(135deg, #fef2f2, #fefbf2);
         }
 
         .form-group {
@@ -201,7 +338,7 @@
             color: #2d3748;
         }
 
-        input[type="text"], textarea {
+        input[type="text"], input[type="url"], textarea {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e2e8f0;
@@ -211,11 +348,10 @@
             font-family: inherit;
         }
 
-        input[type="text"]:focus, textarea:focus {
+        input[type="text"]:focus, input[type="url"]:focus, textarea:focus {
             outline: none;
             border-color: #dc2626;
             box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-            background: rgba(251, 191, 36, 0.05);
         }
 
         textarea {
@@ -231,17 +367,6 @@
             font-weight: 500;
         }
 
-        .char-counter.warning {
-            color: #e53e3e;
-            font-weight: 600;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-
         .analyze-btn {
             background: linear-gradient(135deg, #dc2626 0%, #b91c1c 25%, #fbbf24 75%, #f59e0b 100%);
             color: white;
@@ -255,34 +380,11 @@
             width: 100%;
             margin-top: 20px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .analyze-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .analyze-btn:hover:not(:disabled)::before {
-            left: 100%;
-        }
-
-        .analyze-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
         }
 
         .analyze-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
         }
 
         .results-section {
@@ -301,8 +403,6 @@
             text-align: center;
             margin-bottom: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            backdrop-filter: blur(10px);
         }
 
         .insights-grid {
@@ -321,17 +421,6 @@
             transition: all 0.3s ease;
         }
 
-        .insight-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.15);
-        }
-
-        .insight-card h4 {
-            color: #2d3748;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-
         .score-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -344,12 +433,6 @@
             padding: 12px 15px;
             border-radius: 8px;
             border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
-
-        .score-item:hover {
-            border-color: #fbbf24;
-            background: rgba(251, 191, 36, 0.05);
         }
 
         .score-item strong {
@@ -377,6 +460,11 @@
             100% { transform: rotate(360deg); }
         }
 
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
         .icon {
             margin-right: 8px;
             font-size: 1.2rem;
@@ -392,13 +480,6 @@
             font-weight: 600;
             margin-top: 10px;
             transition: all 0.3s ease;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-
-        .add-participant:hover {
-            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
         }
 
         .remove-participant {
@@ -410,12 +491,6 @@
             cursor: pointer;
             float: right;
             font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .remove-participant:hover {
-            background: #c53030;
-            transform: scale(1.05);
         }
 
         .error-card {
@@ -425,12 +500,6 @@
             padding: 25px;
             margin-top: 20px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.2);
-        }
-
-        .error-card h4 {
-            color: #e53e3e;
-            margin-bottom: 10px;
         }
 
         .success-indicator {
@@ -442,7 +511,6 @@
             text-align: center;
             color: #38a169;
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(56, 161, 105, 0.2);
         }
 
         .craicek-signature {
@@ -455,35 +523,15 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
-            border: 1px solid rgba(251, 191, 36, 0.5);
-            backdrop-filter: blur(10px);
             z-index: 1000;
         }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-                margin-top: 40px;
-            }
-
-            .header::before {
-                width: 60px;
-                height: 60px;
-            }
-
-            .main-card {
-                padding: 20px;
-            }
-
-            .insights-grid {
+            .participants-preview {
                 grid-template-columns: 1fr;
             }
-
-            .craicek-signature {
-                bottom: 10px;
-                right: 10px;
-                font-size: 0.7rem;
-                padding: 8px 12px;
+            .insights-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -493,15 +541,72 @@
         <header class="header">
             <h1>⚡ DebateLens AI</h1>
             <p>Sistema Avanzato di Analisi Comunicativa</p>
-            <p style="font-size: 0.9rem; opacity: 0.8; font-style: italic; margin-top: 5px;">Craicek's Advanced Technology</p>
-            <div class="craicek-badge">🚀 RIZZO AI ACADEMY - Powered by Google Gemini</div>
+            <p style="font-size: 0.9rem; opacity: 0.8; font-style: italic;">Craicek's Version</p>
+            <div class="craicek-badge">🧠 Powered by Google Gemini AI </div>
         </header>
 
         <div class="main-card">
             <div class="ai-info">
-                <strong>🤖 Sistema AI Avanzato</strong><br>
-                Tecnologia di intelligenza artificiale basata su Google Gemini per l'analisi approfondita della comunicazione professionale.<br>
-                <small style="opacity: 0.8; margin-top: 10px; display: block;">Sviluppato da Craicek per Rizzo AI Academy</small>
+                <strong>🧠 Sistema AI Avanzato Gemini Enhanced</strong><br>
+                Tecnologia di intelligenza artificiale basata su Google Gemini per l'analisi approfondita della comunicazione e l'identificazione intelligente dei partecipanti.<br>
+                <small style="opacity: 0.8; margin-top: 10px; display: block;">✨ Rilevamento automatico speaker con AI • Craicek per Rizzo AI Academy</small>
+            </div>
+
+            <!-- YouTube Integration Section -->
+            <div class="youtube-section">
+                <div class="youtube-card">
+                    <h3><span class="icon">🎥</span>Estrazione Automatica da YouTube con Gemini AI</h3>
+                    <p style="color: #666; margin-bottom: 20px; font-size: 0.95rem;">
+                        <strong>🧠 Sistema CRAICEK Gemini AI:</strong> Inserisci un URL YouTube di un dibattito, intervista o discussione.
+                        Il sistema estrarrà automaticamente i partecipanti usando Whisper AI + Gemini per l'identificazione intelligente.
+                    </p>
+
+                    <div class="youtube-input-section">
+                        <div class="form-group">
+                            <label for="youtubeUrl">🔗 URL Video YouTube</label>
+                            <input type="url" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
+                            <div class="url-validation" id="urlValidation"></div>
+                        </div>
+
+                        <button type="button" class="extract-btn" id="extractBtn" onclick="extractFromYouTube()" disabled>
+                            🧠 ESTRAI CON GEMINI AI
+                        </button>
+                    </div>
+
+                    <div class="extraction-progress" id="extractionProgress" style="display: none;">
+                        <div class="progress-steps">
+                            <div class="step active" id="step1">
+                                <span class="step-icon">🎥</span>
+                                <span class="step-text">Download</span>
+                            </div>
+                            <div class="step" id="step2">
+                                <span class="step-icon">🎙️</span>
+                                <span class="step-text">Trascrizione</span>
+                            </div>
+                            <div class="step" id="step3">
+                                <span class="step-icon">🧠</span>
+                                <span class="step-text">Gemini AI</span>
+                            </div>
+                            <div class="step" id="step4">
+                                <span class="step-icon">✅</span>
+                                <span class="step-text">Completo</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <p class="progress-text" id="progressText">Avvio estrazione...</p>
+                    </div>
+
+                    <div class="extraction-results" id="extractionResults" style="display: none;">
+                        <h4>🎯 Risultati Estrazione Gemini AI</h4>
+                        <div class="video-info" id="videoInfo"></div>
+                        <div class="participants-preview" id="participantsPreview"></div>
+                        <button type="button" class="use-extracted-btn" onclick="useExtractedData()">
+                            ⚡ USA QUESTI DATI
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <form id="analysisForm">
@@ -518,7 +623,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="text1">📝 Contenuto/Trascrizione (minimo 50 caratteri)</label>
-                                <textarea id="text1" name="text1" placeholder="Inserisci qui il testo del primo partecipante per l'analisi AI..." required></textarea>
+                                <textarea id="text1" name="text1" placeholder="Inserisci qui il testo del primo partecipante..." required></textarea>
                                 <div class="char-counter" id="counter1">0 caratteri</div>
                             </div>
                         </div>
@@ -532,7 +637,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="text2">📝 Contenuto/Trascrizione (minimo 50 caratteri)</label>
-                                <textarea id="text2" name="text2" placeholder="Inserisci qui il testo del secondo partecipante per l'analisi AI..." required></textarea>
+                                <textarea id="text2" name="text2" placeholder="Inserisci qui il testo del secondo partecipante..." required></textarea>
                                 <div class="char-counter" id="counter2">0 caratteri</div>
                             </div>
                         </div>
@@ -544,7 +649,7 @@
                 </div>
 
                 <button type="submit" class="analyze-btn" id="analyzeBtn">
-                    🤖 AVVIA ANALISI CRAICEK AI
+                    🧠 AVVIA ANALISI GEMINI AI
                 </button>
             </form>
         </div>
@@ -552,16 +657,13 @@
         <div class="results-section" id="resultsSection">
             <div class="loading" id="loadingSection">
                 <div class="spinner"></div>
-                <h3>🤖 Sistema CRAICEK in elaborazione...</h3>
+                <h3>🧠 Sistema CRAICEK Gemini in elaborazione...</h3>
                 <p>Analisi AI multi-dimensionale in corso</p>
-                <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">Tecnologia avanzata Rizzo AI Academy</p>
             </div>
 
             <div class="radar-container" id="radarContainer" style="display: none;">
-                <h3>📊 Analisi Comparativa CRAICEK</h3>
-                <div id="radarChart">
-                    Il radar chart comparativo apparirà qui
-                </div>
+                <h3>📊 Analisi Comparativa CRAICEK Gemini</h3>
+                <div id="radarChart">Il radar chart comparativo apparirà qui</div>
             </div>
 
             <div class="insights-grid" id="insightsContainer" style="display: none;">
@@ -570,14 +672,13 @@
         </div>
     </div>
 
-    <div class="craicek-signature">
-        🔥 CRAICEK × RIZZO AI
-    </div>
+    <div class="craicek-signature">🧠 CRAICEK × RIZZO AI ACCADEMY </div>
 
     <script>
         let participantCount = 2;
+        let extractedData = null;
 
-        // Character counters con validazione avanzata
+        // Character counters
         function setupCharCounters() {
             document.querySelectorAll('textarea').forEach(textarea => {
                 const counterId = 'counter' + textarea.id.slice(-1);
@@ -587,19 +688,12 @@
                     const count = this.value.length;
                     counter.textContent = `${count} caratteri`;
 
-                    // Validazione visiva Iron Man style
                     if (count < 50) {
                         counter.style.color = '#e53e3e';
-                        counter.classList.add('warning');
                         counter.textContent += ' ⚠️ (minimo 50)';
-                    } else if (count > 2000) {
-                        counter.style.color = '#f59e0b';
-                        counter.classList.remove('warning');
-                        counter.textContent += ' ⚡ (ottimale)';
                     } else {
                         counter.style.color = '#38a169';
-                        counter.classList.remove('warning');
-                        counter.textContent += ' ✅ (perfetto)';
+                        counter.textContent += ' ✅';
                     }
 
                     updateSubmitButton();
@@ -607,7 +701,6 @@
             });
         }
 
-        // Aggiorna stato del pulsante con stile Iron Man
         function updateSubmitButton() {
             const btn = document.getElementById('analyzeBtn');
             const participants = document.querySelectorAll('.participant-form');
@@ -624,16 +717,284 @@
             });
 
             btn.disabled = !canSubmit;
-            if (canSubmit) {
-                btn.textContent = '🤖 AVVIA ANALISI CRAICEK AI';
-                btn.style.background = 'linear-gradient(135deg, #dc2626 0%, #b91c1c 25%, #fbbf24 75%, #f59e0b 100%)';
+            btn.textContent = canSubmit ? '🧠 AVVIA ANALISI GEMINI AI' : '⚠️ CONFIGURAZIONE INCOMPLETA';
+        }
+
+        // YouTube URL validation
+        document.getElementById('youtubeUrl').addEventListener('input', function() {
+            const url = this.value.trim();
+            const validation = document.getElementById('urlValidation');
+            const extractBtn = document.getElementById('extractBtn');
+
+            if (!url) {
+                validation.textContent = '';
+                extractBtn.disabled = true;
+                return;
+            }
+
+            const youtubePatterns = [
+                /^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[\w-]+/,
+            ];
+
+            const isValid = youtubePatterns.some(pattern => pattern.test(url));
+
+            if (isValid) {
+                validation.textContent = '✅ URL YouTube valido - Pronto per Gemini AI';
+                validation.className = 'url-validation valid';
+                extractBtn.disabled = false;
+                extractBtn.textContent = '🧠 ESTRAI CON GEMINI AI';
             } else {
-                btn.textContent = '⚠️ CONFIGURAZIONE INCOMPLETA';
-                btn.style.background = 'linear-gradient(135deg, #6b7280, #4b5563)';
+                validation.textContent = '❌ URL YouTube non valido';
+                validation.className = 'url-validation invalid';
+                extractBtn.disabled = true;
+                extractBtn.textContent = '⚠️ URL NON VALIDO';
+            }
+        });
+
+        // YouTube extraction
+        async function extractFromYouTube() {
+            const url = document.getElementById('youtubeUrl').value.trim();
+            const progressDiv = document.getElementById('extractionProgress');
+            const resultsDiv = document.getElementById('extractionResults');
+            const extractBtn = document.getElementById('extractBtn');
+
+            if (!url) return;
+
+            resultsDiv.style.display = 'none';
+            progressDiv.style.display = 'block';
+            extractBtn.disabled = true;
+
+            updateProgress(0, 'Avvio sistema CRAICEK Gemini...');
+            setActiveStep(1);
+
+            try {
+                updateProgress(25, '🎥 Download video...');
+                await sleep(1000);
+
+                setActiveStep(2);
+                updateProgress(50, '🎙️ Trascrizione Whisper AI...');
+                await sleep(1500);
+
+                setActiveStep(3);
+                updateProgress(75, '🧠 Analisi Gemini AI...');
+
+                const response = await fetch('/api/extract-youtube', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ youtube_url: url })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || `Errore HTTP ${response.status}`);
+                }
+
+                setActiveStep(4);
+                updateProgress(100, '✅ Estrazione completata!');
+
+                if (data.success && data.participants && data.participants.length >= 2) {
+                    extractedData = data;
+                    showExtractionResults(data);
+                } else {
+                    throw new Error(data.error || 'Impossibile identificare almeno 2 partecipanti');
+                }
+
+            } catch (error) {
+                console.error('Errore estrazione:', error);
+                showExtractionError(error.message);
+            } finally {
+                extractBtn.disabled = false;
+                extractBtn.textContent = '🧠 ESTRAI CON GEMINI AI';
             }
         }
 
-        // Add participant con animazione
+        function updateProgress(percentage, text) {
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = text;
+        }
+
+        function setActiveStep(stepNumber) {
+            for (let i = 1; i <= 4; i++) {
+                const step = document.getElementById(`step${i}`);
+                step.classList.remove('active', 'completed');
+
+                if (i < stepNumber) {
+                    step.classList.add('completed');
+                } else if (i === stepNumber) {
+                    step.classList.add('active');
+                }
+            }
+        }
+
+        function showExtractionResults(data) {
+            const progressDiv = document.getElementById('extractionProgress');
+            const resultsDiv = document.getElementById('extractionResults');
+            const videoInfo = document.getElementById('videoInfo');
+            const participantsPreview = document.getElementById('participantsPreview');
+
+            setTimeout(() => {
+                progressDiv.style.display = 'none';
+                resultsDiv.style.display = 'block';
+
+                // Video info
+                videoInfo.innerHTML = `
+                    <h5 style="color: #dc2626; margin-bottom: 10px;">📹 ${data.video_title || 'Video YouTube'}</h5>
+                    <p style="margin: 0; color: #4a5568; line-height: 1.6;">
+                        <strong>🧠 Partecipanti identificati da Gemini AI:</strong> ${data.participants ? data.participants.length : 0}<br>
+                        <strong>⏱️ Durata:</strong> ${data.duration ? Math.floor(data.duration/60) + ':' + (data.duration%60).toString().padStart(2,'0') : 'N/A'}<br>
+                        <strong>📺 Canale:</strong> ${data.channel || 'N/A'}<br>
+                        <strong>🤖 Sistema:</strong> ${data.extraction_method || 'Craicek Gemini AI'}<br>
+                        <strong>✨ Modalità:</strong> ${data.gemini_powered ? 'Gemini Enhanced' : 'Standard'}
+                    </p>
+                `;
+
+                // Participants preview
+                participantsPreview.innerHTML = '';
+                if (data.participants && data.participants.length > 0) {
+                    data.participants.forEach((participant, index) => {
+                        const preview = document.createElement('div');
+                        preview.className = 'participant-preview';
+
+                        const textPreview = participant.text ?
+                            participant.text.substring(0, 150) + (participant.text.length > 150 ? '...' : '') :
+                            'Testo non disponibile';
+
+                        let aiBadge = '';
+                        if (participant.detection_method === 'gemini_ai') {
+                            aiBadge = '<span class="ai-badge">🧠 GEMINI</span>';
+                        } else if (participant.detection_method === 'hybrid_gemini_traditional') {
+                            aiBadge = '<span class="ai-badge">🔀 IBRIDO</span>';
+                        } else {
+                            aiBadge = '<span class="ai-badge">🤖 AUTO</span>';
+                        }
+
+                        preview.innerHTML = `
+                            <h5>👤 ${participant.name || `Partecipante ${index + 1}`} ${aiBadge}</h5>
+                            <p><strong>Anteprima:</strong> ${textPreview}</p>
+                            <p style="margin-top: 8px; font-size: 0.8rem; color: #6b7280;">
+                                ${participant.role ? `🎭 ${participant.role} • ` : ''}
+                                ${participant.confidence ? `📊 ${participant.confidence} • ` : ''}
+                                ${participant.text ? participant.text.length : 0} caratteri
+                            </p>
+                        `;
+                        participantsPreview.appendChild(preview);
+                    });
+
+                    // Auto-popolazione dopo 2 secondi
+                    setTimeout(() => autoPopulateParticipants(data.participants), 2000);
+                }
+
+            }, 1500);
+        }
+
+        function autoPopulateParticipants(participants) {
+            const container = document.getElementById('participants-container');
+            container.innerHTML = '';
+            participantCount = 0;
+
+            participants.forEach((participant, index) => {
+                participantCount++;
+
+                const participantDiv = document.createElement('div');
+                participantDiv.className = 'participant-form';
+                participantDiv.setAttribute('data-participant', participantCount);
+
+                let detectionBadge = '';
+                if (participant.detection_method === 'gemini_ai') {
+                    detectionBadge = '<span style="color: #10b981; font-size: 0.8rem;">🧠 Gemini AI</span>';
+                } else if (participant.detection_method === 'hybrid_gemini_traditional') {
+                    detectionBadge = '<span style="color: #f59e0b; font-size: 0.8rem;">🔀 Ibrido</span>';
+                } else {
+                    detectionBadge = '<span style="color: #8b5cf6; font-size: 0.8rem;">🤖 Auto</span>';
+                }
+
+                participantDiv.innerHTML = `
+                    <button type="button" class="remove-participant" onclick="removeParticipant(${participantCount})" style="display: ${participantCount > 2 ? 'block' : 'none'};">Rimuovi</button>
+                    <div class="form-group">
+                        <label for="name${participantCount}">👤 Nome Partecipante ${participantCount} ${detectionBadge}</label>
+                        <input type="text" id="name${participantCount}" name="name${participantCount}"
+                               value="${participant.name || `Partecipante ${participantCount}`}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="text${participantCount}">📝 Contenuto/Trascrizione
+                            <span style="color: #38a169; font-size: 0.8rem;">🧠 Gemini AI</span>
+                        </label>
+                        <textarea id="text${participantCount}" name="text${participantCount}" required>${participant.text}</textarea>
+                        <div class="char-counter" id="counter${participantCount}">
+                            ${participant.text.length} caratteri ✅ (Gemini AI ${participant.confidence ? '• ' + participant.confidence : ''})
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(participantDiv);
+            });
+
+            setTimeout(() => {
+                setupCharCounters();
+                updateRemoveButtons();
+                updateSubmitButton();
+                showSuccessNotification(participants.length);
+
+                document.querySelector('.form-section').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }, 500);
+        }
+
+        function showSuccessNotification(count) {
+            const notification = document.createElement('div');
+            notification.className = 'success-indicator';
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.zIndex = '9999';
+            notification.innerHTML = `
+                🧠 PARTECIPANTI GEMINI AI AUTO-POPOLATI<br>
+                <small>${count} partecipanti estratti con intelligenza artificiale</small>
+            `;
+
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 5000);
+        }
+
+        function useExtractedData() {
+            if (!extractedData || !extractedData.participants) {
+                alert('❌ Nessun dato estratto disponibile');
+                return;
+            }
+            autoPopulateParticipants(extractedData.participants);
+        }
+
+        function showExtractionError(errorMessage) {
+            const progressDiv = document.getElementById('extractionProgress');
+            const resultsDiv = document.getElementById('extractionResults');
+
+            setTimeout(() => {
+                progressDiv.style.display = 'none';
+                resultsDiv.innerHTML = `
+                    <div class="error-card">
+                        <h4 style="color: #e53e3e;">❌ ERRORE ESTRAZIONE GEMINI AI</h4>
+                        <p>${errorMessage}</p>
+                        <button onclick="resetYouTubeSection()" style="margin-top: 15px; background: #dc2626; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                            🔄 RIPROVA
+                        </button>
+                    </div>
+                `;
+                resultsDiv.style.display = 'block';
+            }, 1000);
+        }
+
+        function resetYouTubeSection() {
+            document.getElementById('youtubeUrl').value = '';
+            document.getElementById('urlValidation').textContent = '';
+            document.getElementById('extractBtn').disabled = true;
+            document.getElementById('extractionProgress').style.display = 'none';
+            document.getElementById('extractionResults').style.display = 'none';
+            extractedData = null;
+        }
+
         function addParticipant() {
             participantCount++;
             const container = document.getElementById('participants-container');
@@ -641,8 +1002,6 @@
             const participantDiv = document.createElement('div');
             participantDiv.className = 'participant-form';
             participantDiv.setAttribute('data-participant', participantCount);
-            participantDiv.style.opacity = '0';
-            participantDiv.style.transform = 'translateY(20px)';
 
             participantDiv.innerHTML = `
                 <button type="button" class="remove-participant" onclick="removeParticipant(${participantCount})">Rimuovi</button>
@@ -652,45 +1011,26 @@
                 </div>
                 <div class="form-group">
                     <label for="text${participantCount}">📝 Contenuto/Trascrizione (minimo 50 caratteri)</label>
-                    <textarea id="text${participantCount}" name="text${participantCount}" placeholder="Inserisci qui il testo del partecipante per l'analisi AI..." required></textarea>
+                    <textarea id="text${participantCount}" name="text${participantCount}" placeholder="Inserisci qui il testo..." required></textarea>
                     <div class="char-counter" id="counter${participantCount}">0 caratteri</div>
                 </div>
             `;
 
             container.appendChild(participantDiv);
-
-            // Animazione di entrata
-            setTimeout(() => {
-                participantDiv.style.transition = 'all 0.3s ease';
-                participantDiv.style.opacity = '1';
-                participantDiv.style.transform = 'translateY(0)';
-            }, 10);
-
             setupCharCounters();
             updateRemoveButtons();
             updateSubmitButton();
-
-            // Event listeners
-            document.getElementById(`name${participantCount}`).addEventListener('input', updateSubmitButton);
         }
 
-        // Remove participant con animazione
         function removeParticipant(id) {
             const participant = document.querySelector(`[data-participant="${id}"]`);
             if (participant) {
-                participant.style.transition = 'all 0.3s ease';
-                participant.style.opacity = '0';
-                participant.style.transform = 'translateX(-20px)';
-
-                setTimeout(() => {
-                    participant.remove();
-                    updateRemoveButtons();
-                    updateSubmitButton();
-                }, 300);
+                participant.remove();
+                updateRemoveButtons();
+                updateSubmitButton();
             }
         }
 
-        // Update remove buttons
         function updateRemoveButtons() {
             const participants = document.querySelectorAll('.participant-form');
             participants.forEach(p => {
@@ -703,7 +1043,6 @@
         document.getElementById('analysisForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Collect and validate
             const participants = [];
             const participantForms = document.querySelectorAll('.participant-form');
 
@@ -718,292 +1057,113 @@
             });
 
             if (participants.length < 2) {
-                showError('ERRORE: Configurazione insufficiente. Necessari almeno 2 partecipanti con testi di minimo 50 caratteri per l\'analisi CRAICEK AI');
+                alert('Necessari almeno 2 partecipanti con testi di minimo 50 caratteri');
                 return;
             }
 
-            // Show loading
             document.getElementById('resultsSection').classList.add('show');
             document.getElementById('loadingSection').style.display = 'block';
             document.getElementById('radarContainer').style.display = 'none';
             document.getElementById('insightsContainer').style.display = 'none';
 
-            hideError();
             analyzeWithAPI(participants);
         });
 
-        // API call
         async function analyzeWithAPI(participants) {
             try {
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ participants })
                 });
 
                 const data = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(data.error || `ERRORE HTTP ${response.status}`);
+                    throw new Error(data.error || `Errore HTTP ${response.status}`);
                 }
 
                 if (data.success) {
                     showResults(data);
                 } else {
-                    throw new Error(data.error || 'Analisi CRAICEK fallita');
+                    throw new Error(data.error || 'Analisi fallita');
                 }
 
             } catch (error) {
-                console.error('Errore CRAICEK AI:', error);
-                showError(`ERRORE SISTEMA CRAICEK: ${error.message}`);
+                console.error('Errore analisi:', error);
+                showError(error.message);
             }
         }
 
-        // Show results con stile Iron Man
         function showResults(data) {
-            console.log('🔥 CRAICEK Results:', data);
-
             document.getElementById('loadingSection').style.display = 'none';
             document.getElementById('radarContainer').style.display = 'block';
             document.getElementById('insightsContainer').style.display = 'block';
 
-            // Success indicator professionale
             const successDiv = document.createElement('div');
             successDiv.className = 'success-indicator';
-            successDiv.innerHTML = `
-                ⚡ ANALISI CRAICEK COMPLETATA • ${data.participants_count} SOGGETTI ANALIZZATI<br>
-                <small style="opacity: 0.8;">🤖 ${data.powered_by} Enhanced • Rizzo AI Academy • ${data.timestamp}</small>
-            `;
+            successDiv.innerHTML = `🧠 ANALISI GEMINI AI COMPLETATA • ${data.participants_count} SOGGETTI ANALIZZATI`;
             document.getElementById('radarContainer').insertBefore(successDiv, document.getElementById('radarChart'));
 
-            // Show radar chart
             if (data.chart_data) {
-                console.log('📊 Rendering CRAICEK Radar Chart');
                 const base64Data = data.chart_data.startsWith('data:image') ?
                     data.chart_data : `data:image/png;base64,${data.chart_data}`;
 
                 document.getElementById('radarChart').innerHTML = `
-                    <div style="text-align: center;">
-                        <img src="${base64Data}"
-                             style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 15px 35px rgba(220, 38, 38, 0.3); border: 2px solid rgba(251, 191, 36, 0.5);"
-                             alt="CRAICEK AI Radar Analysis" />
-                        <p style="margin-top: 15px; color: #666; font-size: 0.9rem;">
-                            🔥 Generato da Sistema CRAICEK - Rizzo AI Academy
-                        </p>
-                    </div>
-                `;
-            } else {
-                document.getElementById('radarChart').innerHTML = `
-                    <div style="background: linear-gradient(135deg, #dc2626, #fbbf24); color: white; padding: 40px; border-radius: 12px; text-align: center; border: 2px solid rgba(251, 191, 36, 0.8);">
-                        <h3>⚡ ANALISI CRAICEK COMPLETATA</h3>
-                        <p style="opacity: 0.9; margin-top: 10px;">Visualizzazione radar non disponibile</p>
-                        <small style="opacity: 0.7; display: block; margin-top: 15px;">Sistema Avanzato Rizzo AI Academy</small>
-                    </div>
+                    <img src="${base64Data}" style="max-width: 100%; height: auto; border-radius: 12px;" alt="Radar Chart" />
                 `;
             }
 
-            // Show detailed insights
+            // Show insights
             const insightsContainer = document.getElementById('insightsContainer');
             insightsContainer.innerHTML = '';
 
             if (data.report && data.report.detailed_comparison) {
-                console.log('📝 Rendering CRAICEK Insights');
-
                 Object.entries(data.report.detailed_comparison).forEach(([name, analysis]) => {
                     const insightCard = document.createElement('div');
                     insightCard.className = 'insight-card';
-
                     const scores = analysis.scores || analysis;
-                    const explanations = analysis.explanations || {};
 
                     insightCard.innerHTML = `
-                        <h4>⚡ ${name} - CRAICEK AI Analysis</h4>
+                        <h4>🧠 ${name} - Gemini AI Analysis</h4>
                         <div class="score-grid">
                             <div class="score-item">🎯 Rigorosità Tecnica: <strong>${scores.rigorosita_tecnica}/10</strong></div>
-                            <div class="score-item">📊 Uso Dati Oggettivi: <strong>${scores.uso_dati_oggettivi}/10</strong></div>
-                            <div class="score-item">💡 Approccio Divulgativo: <strong>${scores.approccio_divulgativo}/10</strong></div>
-                            <div class="score-item">🗣️ Stile Comunicativo: <strong>${scores.stile_comunicativo}/10</strong></div>
+                            <div class="score-item">📊 Uso Dati: <strong>${scores.uso_dati_oggettivi}/10</strong></div>
+                            <div class="score-item">💡 Divulgativo: <strong>${scores.approccio_divulgativo}/10</strong></div>
+                            <div class="score-item">🗣️ Comunicativo: <strong>${scores.stile_comunicativo}/10</strong></div>
                             <div class="score-item">🎯 Focalizzazione: <strong>${scores.focalizzazione_argomento}/10</strong></div>
-                            <div class="score-item">⚙️ Orientamento Pratico: <strong>${scores.orientamento_pratico}/10</strong></div>
+                            <div class="score-item">⚙️ Pratico: <strong>${scores.orientamento_pratico}/10</strong></div>
                         </div>
-                        ${explanations.rigorosita_tecnica ? `
-                        <div style="margin-top: 20px; padding: 18px; background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), rgba(251, 191, 36, 0.1)); border-radius: 10px; border-left: 4px solid #dc2626;">
-                            <strong>🧠 Sistema AI Avanzato:</strong><br>
-                            <small style="line-height: 1.5; color: #4a5568;">${explanations.rigorosita_tecnica}</small>
-                        </div>
-                        ` : ''}
                     `;
                     insightsContainer.appendChild(insightCard);
                 });
             }
-
-            // Show automatic insights
-            if (data.report && data.report.insights && data.report.insights.length > 0) {
-                console.log('🔥 Rendering CRAICEK Auto-Insights');
-
-                const insightsCard = document.createElement('div');
-                insightsCard.className = 'insight-card';
-                insightsCard.style.gridColumn = '1 / -1';
-                insightsCard.style.background = 'linear-gradient(135deg, #fef2f2, #fefbf2)';
-                insightsCard.style.border = '2px solid #fbbf24';
-                insightsCard.innerHTML = `
-                    <h4>🔥 Insights Automatici CRAICEK - Sistema Avanzato</h4>
-                    <ul style="margin-top: 20px; line-height: 1.8; list-style: none;">
-                        ${data.report.insights.map(insight => `
-                            <li style="margin-bottom: 12px; padding: 8px; background: rgba(255,255,255,0.7); border-radius: 6px; border-left: 3px solid #dc2626;">
-                                ${insight}
-                            </li>
-                        `).join('')}
-                    </ul>
-                    <div style="margin-top: 25px; padding: 20px; background: rgba(0,0,0,0.8); border-radius: 12px; text-align: center; color: #fbbf24;">
-                        <strong>⚡ ${data.version}</strong><br>
-                        <small style="opacity: 0.8;">
-                            🤖 ${data.powered_by} Enhanced • Rizzo AI Academy<br>
-                            Analysis ID: ${data.timestamp} • Craicek Advanced Technology
-                        </small>
-                    </div>
-                `;
-                insightsContainer.appendChild(insightsCard);
-            }
-
-            console.log('✅ CRAICEK Rendering completato');
-
-            // Animazione di entrata per i risultati
-            const cards = document.querySelectorAll('.insight-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    card.style.transition = 'all 0.5s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
         }
 
-        // Show error con stile Iron Man
         function showError(message) {
             document.getElementById('loadingSection').style.display = 'none';
-
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error-card';
-            errorDiv.id = 'errorCard';
-            errorDiv.style.background = 'linear-gradient(135deg, #fed7d7, #fecaca)';
-            errorDiv.style.border = '2px solid #e53e3e';
             errorDiv.innerHTML = `
-                <h4>❌ SISTEMA CRAICEK - ERRORE CRITICO</h4>
-                <p style="font-weight: 600; margin: 15px 0;">${message}</p>
-                <div style="background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
-                    <p style="font-size: 0.9rem; margin-top: 15px; opacity: 0.8;">
-                        🔧 <strong>Diagnostica Sistema:</strong><br>
-                        • Verifica che il server Flask sia operativo<br>
-                        • Controlla configurazione GOOGLE_API_KEY<br>
-                        • Assicurati che la connessione di rete sia stabile
-                    </p>
-                </div>
-                <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.7;">
-                    🤖 Sistema CRAICEK - Rizzo AI Academy
-                </p>
+                <h4>❌ ERRORE GEMINI AI</h4>
+                <p>${message}</p>
             `;
-
             document.getElementById('resultsSection').appendChild(errorDiv);
-            document.getElementById('resultsSection').classList.add('show');
-
-            // Animazione errore
-            errorDiv.style.opacity = '0';
-            errorDiv.style.transform = 'scale(0.9)';
-            setTimeout(() => {
-                errorDiv.style.transition = 'all 0.3s ease';
-                errorDiv.style.opacity = '1';
-                errorDiv.style.transform = 'scale(1)';
-            }, 10);
         }
 
-        // Hide error
-        function hideError() {
-            const errorCard = document.getElementById('errorCard');
-            if (errorCard) {
-                errorCard.style.transition = 'all 0.3s ease';
-                errorCard.style.opacity = '0';
-                errorCard.style.transform = 'scale(0.9)';
-                setTimeout(() => errorCard.remove(), 300);
-            }
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        // Initialize Sistema CRAICEK
-        console.log('🔥 Sistema CRAICEK inizializzazione...');
+        // Initialize
         setupCharCounters();
         updateRemoveButtons();
         updateSubmitButton();
 
-        // Event listeners
         document.getElementById('name1').addEventListener('input', updateSubmitButton);
         document.getElementById('name2').addEventListener('input', updateSubmitButton);
 
-        // Form interactions con effetti Iron Man
-        document.querySelectorAll('.participant-form').forEach(form => {
-            form.addEventListener('focus', function() {
-                this.classList.add('active');
-            }, true);
-
-            form.addEventListener('blur', function() {
-                this.classList.remove('active');
-            }, true);
-        });
-
-        // Easter egg: Konami Code per attivare modalità CRAICEK speciale
-        let konamiCode = [];
-        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
-
-        document.addEventListener('keydown', function(e) {
-            konamiCode.push(e.code);
-            if (konamiCode.length > konamiSequence.length) {
-                konamiCode.shift();
-            }
-
-            if (JSON.stringify(konamiCode) === JSON.stringify(konamiSequence)) {
-                document.body.style.background = 'linear-gradient(135deg, #fbbf24 0%, #dc2626 25%, #b91c1c 75%, #7c2d12 100%)';
-                document.querySelector('.craicek-signature').innerHTML = '🔥 MODALITÀ AVANZATA ATTIVATA';
-                document.querySelector('.craicek-signature').style.animation = 'pulse 1s infinite';
-
-                // Effetto particelle
-                for (let i = 0; i < 20; i++) {
-                    setTimeout(() => {
-                        const particle = document.createElement('div');
-                        particle.style.cssText = `
-                            position: fixed;
-                            width: 4px;
-                            height: 4px;
-                            background: #fbbf24;
-                            border-radius: 50%;
-                            pointer-events: none;
-                            z-index: 9999;
-                            top: ${Math.random() * window.innerHeight}px;
-                            left: ${Math.random() * window.innerWidth}px;
-                            animation: float 3s ease-out forwards;
-                        `;
-                        document.body.appendChild(particle);
-                        setTimeout(() => particle.remove(), 3000);
-                    }, i * 50);
-                }
-
-                konamiCode = [];
-            }
-        });
-
-        // CSS per animazione particelle
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes float {
-                0% { opacity: 1; transform: translateY(0) scale(1); }
-                100% { opacity: 0; transform: translateY(-100px) scale(0); }
-            }
-        `;
-        document.head.appendChild(style);
-
-        console.log('✅ Sistema CRAICEK Pronto - Rizzo AI Academy');
+        console.log('✅ Sistema GEMINI AI Pronto - Rizzo AI Academy');
     </script>
 </body>
 </html>
