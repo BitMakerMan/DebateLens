@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-3.1.1-green.svg)](https://flask.palletsprojects.com/)
 [![Google Gemini AI](https://img.shields.io/badge/Google%20Gemini-AI-orange.svg)](https://ai.google.dev/gemini)
-[![Rizzo AI Academy](https://img.shields.io/badge/Rizzo%20AI-Academy-red.svg)]([https://rizzo.ai](https://www.rizzoaiacademy.com/))
+[![Rizzo AI Academy](https://img.shields.io/badge/Rizzo%20AI-Academy-red.svg)](https://rizzo.ai](https://www.rizzoaiacademy.com )
 
 **Craicek's Version** - Sviluppato per Rizzo AI Academy
 
