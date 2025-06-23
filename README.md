@@ -454,15 +454,6 @@ DebateLens/
 - ✅ **Validazione** input
 - ✅ **Interface** web basic
 
-### Roadmap Futura
-- 🔲 **Supporto live streaming** YouTube
-- 🔲 **Batch processing** per playlist
-- 🔲 **Export PDF** dei report
-- 🔲 **Dashboard analytics** avanzata
-- 🔲 **Multi-lingua** per analisi
-- 🔲 **Integration webhook** per notifiche
-- 🔲 **Real-time collaboration** per team
-
 ---
 
 ## 🎯 Esempi di Utilizzo
