@@ -594,6 +594,11 @@ self.analysis_criteria = [
 ```
 
 ---
+### ARCHITETTURA
+
+![ARCHITETTURA](Craicek_DebateLens.png)
+
+
 
 <div align="center">
 
